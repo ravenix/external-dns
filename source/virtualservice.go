@@ -76,9 +76,7 @@ func NewIstioVirtualServiceSource(
 	)
 
 	if fqdnTemplate != "" {
-		tmpl, err = template.New("endpoint").Funcs(template.FuncMap{
-			"trimPrefix": strings.TrimPrefix,
-		}).Parse(fqdnTemplate)
+		tmpl, err = template.New("endpoint").Funcs(fqdnTemplateFuncMap).Parse(fqdnTemplate)
 		if err != nil {
 			return nil, err
 		}
