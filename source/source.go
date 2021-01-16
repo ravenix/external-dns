@@ -65,6 +65,11 @@ const (
 	ttlMaximum = math.MaxInt32
 )
 
+var fqdnTemplateFuncMap = template.FuncMap{
+	"replace": strings.Replace,
+	"trimPrefix": strings.TrimPrefix,
+}
+
 // Source defines the interface Endpoint sources should implement.
 type Source interface {
 	Endpoints(ctx context.Context) ([]*endpoint.Endpoint, error)
