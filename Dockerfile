@@ -13,23 +13,16 @@
 # limitations under the License.
 
 # builder image
-ARG ARCH
 FROM golang:1.15 as builder
-ARG ARCH
 
 WORKDIR /sigs.k8s.io/external-dns
 
 COPY . .
-RUN make test && make build.$ARCH
+RUN make test && make build.amd64
 
 # final image
-FROM $ARCH/alpine:3.12
+FROM docker.io/bitnami/external-dns:0.7.6-debian-10-r0
 
-COPY --from=builder /etc/ssl/certs/ca-certificates.crt /etc/ssl/certs/ca-certificates.crt
-COPY --from=builder /sigs.k8s.io/external-dns/build/external-dns /bin/external-dns
-
-# Run as UID for nobody since k8s pod securityContext runAsNonRoot can't resolve the user ID:
-# https://github.com/kubernetes/kubernetes/issues/40958
-USER 65534
-
-ENTRYPOINT ["/bin/external-dns"]
+USER root
+COPY --from=builder /sigs.k8s.io/external-dns/build/external-dns /opt/bitnami/external-dns/bin/external-dns
+USER 1001
