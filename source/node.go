@@ -20,7 +20,6 @@ import (
 	"bytes"
 	"context"
 	"fmt"
-	"strings"
 	"text/template"
 	"time"
 
