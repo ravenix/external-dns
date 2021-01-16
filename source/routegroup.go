@@ -192,9 +192,7 @@ func (cli *routeGroupClient) do(req *http.Request) (*http.Response, error) {
 
 func parseTemplate(fqdnTemplate string) (tmpl *template.Template, err error) {
 	if fqdnTemplate != "" {
-		tmpl, err = template.New("endpoint").Funcs(template.FuncMap{
-			"trimPrefix": strings.TrimPrefix,
-		}).Parse(fqdnTemplate)
+		tmpl, err = template.New("endpoint").Funcs(fqdnTemplateFuncMap).Parse(fqdnTemplate)
 	}
 	return tmpl, err
 }
