@@ -157,7 +157,7 @@ func testNodeSourceEndpoints(t *testing.T) {
 			false,
 		},
 		{
-			"node with both external and internal IP returns an endpoint with external IP",
+			"node with both external and internal IP returns an endpoint with internal IP",
 			"",
 			"",
 			"node1",
@@ -165,7 +165,7 @@ func testNodeSourceEndpoints(t *testing.T) {
 			map[string]string{},
 			map[string]string{},
 			[]*endpoint.Endpoint{
-				{RecordType: "A", DNSName: "node1", Targets: endpoint.Targets{"1.2.3.4"}},
+				{RecordType: "A", DNSName: "node1", Targets: endpoint.Targets{"2.3.4.5"}},
 			},
 			false,
 		},
