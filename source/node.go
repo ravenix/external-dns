@@ -180,6 +180,16 @@ func (ns *nodeSource) nodeAddresses(node *v1.Node) ([]string, error) {
 		addresses[addr.Type] = append(addresses[addr.Type], addr.Address)
 	}
 
+	access := getAccessFromAnnotations(node.Labels)
+
+	if access == "public" {
+		return addresses[v1.NodeExternalIP], nil
+	}
+
+	if access == "private" {
+		return addresses[v1.NodeInternalIP], nil
+	}
+
 	if len(addresses[v1.NodeExternalIP]) > 0 {
 		return addresses[v1.NodeExternalIP], nil
 	}
