@@ -66,13 +66,15 @@ type coreDNSProvider struct {
 
 // Service represents CoreDNS etcd record
 type Service struct {
-	Host     string `json:"host,omitempty"`
-	Port     int    `json:"port,omitempty"`
-	Priority int    `json:"priority,omitempty"`
-	Weight   int    `json:"weight,omitempty"`
-	Text     string `json:"text,omitempty"`
-	Mail     bool   `json:"mail,omitempty"` // Be an MX record. Priority becomes Preference.
-	TTL      uint32 `json:"ttl,omitempty"`
+	Host       string `json:"host,omitempty"`
+	Port       int    `json:"port,omitempty"`
+	Priority   int    `json:"priority,omitempty"`
+	Weight     int    `json:"weight,omitempty"`
+	Text       string `json:"text,omitempty"`
+	Mail       bool   `json:"mail,omitempty"` // Be an MX record. Priority becomes Preference.
+	TTL        uint32 `json:"ttl,omitempty"`
+
+	RecordType string `json:"type,omitempty"`
 
 	// When a SRV record with a "Host: IP-address" is added, we synthesize
 	// a srv.Target domain name.  Normally we convert the full Key where
@@ -115,7 +117,7 @@ func (c etcdClient) GetServices(prefix string) ([]*Service, error) {
 		if err := json.Unmarshal(n.Value, svc); err != nil {
 			return nil, fmt.Errorf("%s: %s", n.Key, err.Error())
 		}
-		b := Service{Host: svc.Host, Port: svc.Port, Priority: svc.Priority, Weight: svc.Weight, Text: svc.Text, Key: string(n.Key)}
+		b := Service{Host: svc.Host, Port: svc.Port, Priority: svc.Priority, Weight: svc.Weight, Text: svc.Text, Key: string(n.Key), RecordType: svc.RecordType}
 		if _, ok := bx[b]; ok {
 			// skip the service if already added to service list.
 			// the same service might be found in multiple etcd nodes.
@@ -307,7 +309,7 @@ func (p coreDNSProvider) Records(ctx context.Context) ([]*endpoint.Endpoint, err
 			} else {
 				ep = endpoint.NewEndpointWithTTL(
 					dnsName,
-					guessRecordType(service.Host),
+					guessRecordType(service),
 					endpoint.TTL(service.TTL),
 					service.Host,
 				)
@@ -457,8 +459,13 @@ func (p coreDNSProvider) etcdKeyFor(dnsName string) string {
 	return p.coreDNSPrefix + strings.Join(domains, "/")
 }
 
-func guessRecordType(target string) string {
-	if net.ParseIP(target) != nil {
+func guessRecordType(service *Service) string {
+	if len(service.RecordType) > 0 {
+		return service.RecordType
+	}
+
+	// legacy behaviour
+	if net.ParseIP(service.Host) != nil {
 		return endpoint.RecordTypeA
 	}
 	return endpoint.RecordTypeCNAME

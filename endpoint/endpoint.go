@@ -29,6 +29,8 @@ const (
 	RecordTypeA = "A"
 	// RecordTypeCNAME is a RecordType enum value
 	RecordTypeCNAME = "CNAME"
+	// RecordTypeMX is a RecordType enum value
+	RecordTypeMX = "MX"
 	// RecordTypeTXT is a RecordType enum value
 	RecordTypeTXT = "TXT"
 	// RecordTypeSRV is a RecordType enum value
