@@ -113,7 +113,7 @@ func (p *HetznerProvider) submitChanges(ctx context.Context, changes []*HetznerC
 		return err
 	}
 
-	for _, z := range zones {
+	for _, z := range zones.Zones {
 		log.Debugf("Loaded zone %s with id %s", z.Name, z.ID)
 	}
 
