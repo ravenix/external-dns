@@ -112,6 +112,7 @@ var fqdnTemplateFuncMap = template.FuncMap{
 	//"trimRightFunc": strings.TrimRightFunc,
 	"trimSpace": strings.TrimSpace,
 	"trimSuffix": strings.TrimSuffix,
+	"type": GetType,
 }
 
 // Source defines the interface Endpoint sources should implement.
@@ -119,6 +120,10 @@ type Source interface {
 	Endpoints(ctx context.Context) ([]*endpoint.Endpoint, error)
 	// AddEventHandler adds an event handler that should be triggered if something in source changes
 	AddEventHandler(context.Context, func())
+}
+
+func GetType(myvar interface{}) string {
+    return reflect.TypeOf(myvar).String()
 }
 
 func getTTLFromAnnotations(annotations map[string]string) (endpoint.TTL, error) {
