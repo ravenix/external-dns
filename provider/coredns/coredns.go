@@ -415,7 +415,6 @@ func (p coreDNSProvider) ApplyChanges(ctx context.Context, changes *plan.Changes
 					Key:         p.etcdKeyFor(prefix + "." + dnsName),
 					TargetStrip: strings.Count(prefix, ".") + 1,
 					TTL:         uint32(ep.RecordTTL),
-					RecordType:  ep.RecordType,
 				})
 			}
 			services[index].Text = ep.Targets[0]
