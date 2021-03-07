@@ -143,9 +143,10 @@ func TestRunOnce(t *testing.T) {
 
 	// Run our controller once to trigger the validation.
 	ctrl := &Controller{
-		Source:   source,
-		Registry: r,
-		Policy:   &plan.SyncPolicy{},
+		Source:             source,
+		Registry:           r,
+		Policy:             &plan.SyncPolicy{},
+		ManagedRecordTypes: []string{endpoint.RecordTypeA},
 	}
 
 	assert.NoError(t, ctrl.RunOnce(context.Background()))
