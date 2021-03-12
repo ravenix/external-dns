@@ -169,6 +169,7 @@ func (cs *crdSource) Endpoints(ctx context.Context) ([]*endpoint.Endpoint, error
 			crdEndpoints = append(crdEndpoints, ep)
 		}
 
+		log.Debugf("Endpoints generated from crd: %s/%s: %v", dnsEndpoint.Namespace, dnsEndpoint.Name, crdEndpoints)
 		cs.setResourceLabel(&dnsEndpoint, crdEndpoints)
 		endpoints = append(endpoints, crdEndpoints...)
 
