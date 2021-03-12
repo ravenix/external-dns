@@ -110,7 +110,7 @@ func (p *HetznerProvider) submitChanges(ctx context.Context, changes []*HetznerC
 
 	zones, err := p.Client.GetZones(hclouddns.HCloudGetZonesParams{})
 	if err != nil {
-		log.Debugf("Error loading zones: %v", err)
+		log.Errorf("Error loading zones: %v", err)
 		return err
 	}
 

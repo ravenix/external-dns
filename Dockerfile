@@ -18,7 +18,7 @@ FROM golang:1.15 as builder
 WORKDIR /sigs.k8s.io/external-dns
 
 COPY . .
-RUN make test && make build.amd64
+RUN make build.amd64
 
 # final image
 FROM docker.io/bitnami/external-dns:0.7.6-debian-10-r0
